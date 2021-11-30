@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <link rel="stylesheet" type="text/css" href="css/voice.css">
+  <LINK REL=StyleSheet HREF="css/styles.css" TYPE="text/css" MEDIA=screen>
+  <LINK REL=StyleSheet HREF="css/autocomplete.css" TYPE="text/css" MEDIA=screen>
+    <LINK REL=StyleSheet HREF="css/expand.css" TYPE="text/css" MEDIA=screen>
+  <LINK REL=StyleSheet HREF="css/search_filter.css" TYPE="text/css" MEDIA=screen>
+  <LINK REL=StyleSheet HREF="css/spellcheck.css" TYPE="text/css" MEDIA=screen>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <title>Buscador</title>
+</head>
+<body>
+    <header>
+        <h1>Buscador</h1>
+    </header>
+    <main>
+        <div class="buscador">
+            <div class="searchForm" id="searchForm">
+                <!-- <img src="img/lupa.svg" id="btn" class="searchBtn"> -->
+                <input type="search" id="inputSearch" class="searchBar" placeholder="Escriba algo..." oninput="autoComplete()">
+                
+
+                <button  class="form__microphone-icon" type="button" title="Búsqueda por voz"></button>
+                <!-- <img src="img/micro.png" class="searchBtn"> -->
+                
+                <img src="img/lupa.png" id="btn" class="searchBtn">
+                <!-- <input type="button" id="btn" class="searchBtn" value="Buscar"> -->
+            </div>
+        </div>
+        <div id="autoComplete" class="autoComplete"></div>
+        <!-- <script>
+
+        </script> -->
+        <div id="spellCheck"></div>
+        <div id="count"></div>
+        <!-- <div id="resultados"></div> -->
+        <div id="search_filter_container"></div>
+        <div id="resultados"></div>
+        <div id="expand"></div>
+
+    </main>
+    <script src="js/search.js"></script>
+    <script src="js/autoComplete.js"></script>
+    <script src="js/search_filter.js"></script>
+    <script src="js/spellCheck.js"></script>
+    <script src="js/expand.js"></script>
+
+    <div class="voice-search">
+      <div class="voice-search__close-modal">X</div>
+      <div class="voice-search__result">
+        <div class="voice-search__result-text"></div>
+      </div>
+      <div class="voice-search__animation">
+        <span class="voice-search__microphone-icon fas fa-microphone"></span>
+        <span class="voice-search__microphone-border"></span>
+      </div>
+    </div>
+   <script src="js/voice-search.js"></script>
+
+</body>
+</html>

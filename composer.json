@@ -1,0 +1,7 @@
+{
+    "require": {
+        "landrok/language-detector": "^1.3",
+        "icanboogie/inflector": "^2.0",
+        "guzzlehttp/guzzle": "^7.2"
+    }
+}
