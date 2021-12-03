@@ -1,0 +1,114 @@
+* {
+	box-sizing: border-box;
+    outline: none;
+    /*font-family: 'Segoe UI', 'Roboto', arial, sans-serif;*/
+    user-select: none;
+}
+
+ul, a {
+	padding: 0; 
+	margin: 0;
+	color: black;
+}
+
+.form__microphone-icon {
+border: 0;
+background: url(../img/micro.png) no-repeat center;
+background-size: 21px 21px;
+cursor: pointer;
+padding: 22px 12px 0;
+width: 21px;
+float:right;
+vertical-align: center;
+}
+
+/*-------------VOICE-SEARCH-------------*/
+
+.voice-search {
+	position: absolute;
+	width: 100vw;
+	height: 10vh;
+	background-color: #fff;
+	display: flex;
+	z-index: 99999;
+    align-items: center;
+    justify-content: center;
+    display: none;
+    padding: 0 10vw;
+	top: 20%;
+    /* left: 35%; */
+}
+
+.voice-search__result, .voice-search__animation {
+	height: 100vh;
+	width: 40vw;
+	display: flex;
+	text-align: center;
+	align-items: center;
+	justify-content: center;
+}
+
+.voice-search__result-text {
+	color: #666;
+	font-size: 34px;
+}
+
+.voice-search__microphone-icon {
+	color: #000;
+	font-size: 80px;
+	height: 180px;
+	width: 180px;
+	background-color: #fff;
+	border-radius: 50%;
+	text-align: center;
+	padding: 50px 0;
+	transition: color .12s, background-color .12s;
+	box-shadow: 1px 1px 5px #ccc
+}
+
+.voice-search__microphone-icon:hover {
+	color: #fff;
+	background-color: #000;
+}
+
+.voice-search__microphone-border {
+	position: absolute;
+	height: 180px;
+	width: 180px;
+	border-radius: 50%;
+	text-align: center;
+	transition: border-width .13s;
+	border: 0 solid #ccc;
+	box-sizing: content-box;
+}
+
+.voice-search__microphone-border:hover {
+	border-width: 70px;
+}
+
+.voice-search__close-modal {
+	position: absolute;
+	font-size: 30px;
+	font-weight: 700;
+	color: #666;
+	top: 12px;
+	right: 30px
+}
+
+@keyframes aparecer {
+	0% {
+		opacity: 0
+	}
+	100% {
+		opacity: 1;
+	}
+}
+
+@keyframes desaparecer {
+	0% {
+		opacity: 1
+	}
+	100% {
+		opacity: 0;
+	}
+}

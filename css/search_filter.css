@@ -1,0 +1,42 @@
+#resultados{
+  width: 90%;
+  margin-left: 10%;
+}
+
+#search_filter_container{
+  /* position: center; */
+  /* left: 15px;
+  top: 263px;
+  width: 16%;
+  height: 300px; */
+}
+
+.filters-container{
+  /* position: center; */
+  /* align-self: center; */
+
+    display: flex;
+    /* flex-flow: column; */
+    position: absolute;
+    top: 34%;
+    left: 35%;
+}
+
+.filters-container > button{
+  background-color: none;
+  border: solid 2px #00ea19;
+  color: black;
+  align-self: center;
+  width: 200px;
+  height: 30px;
+  border-radius: 100px;
+
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+.filters-container > button:hover{
+  background-color: darkgray;
+  margin-top: 5px;
+  cursor: pointer;
+}

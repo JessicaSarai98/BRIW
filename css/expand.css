@@ -1,0 +1,28 @@
+.expandiv{
+  /* width: 80%;
+  margin: auto; */
+  position: absolute;
+  top: 92%;
+  left: 40%;
+  margin: -25px 0 0 -25px;
+}
+.expandTitle{
+  color: #00ea19;
+  font-size: 18px;
+  text-align: center;
+}
+.expand{
+  margin: 0px auto;
+  height: 30px;
+  font-size: 18px;
+  background-color: #FAFAFA;
+  /* position: absolute; */
+  /* top: 92%; */
+  /* left: 35%; */
+  width: auto;
+  border-radius: 100px;
+
+}
+.expand:hover{
+  background-color: #C1C7C9;
+}
