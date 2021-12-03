@@ -71,7 +71,12 @@ class CrawlerService
     public function writeDocs($fileLocation, $urls) {
         $file = fopen($fileLocation, "w");
         for ($i=0; $i < count($urls); $i++) {
-            fwrite($file, $urls[$i] . PHP_EOL);
+            if($i != (count($urls) -1) ){
+                fwrite($file, $urls[$i] . PHP_EOL);
+            }else {
+                fwrite($file, $urls[$i]);
+            }
+
         }
         fclose($file);
     }

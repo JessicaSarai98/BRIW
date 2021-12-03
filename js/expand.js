@@ -16,7 +16,7 @@ function expand() {
     wrapper.innerHTML = '';
     if (palabraBuscar.length>0) {
       let urlBusqueda = 'php/expand.php?e=' + palabraBuscar;
-        // console.log("expansion")
+      console.log("expansion")
 
       get(urlBusqueda).then(function(response) {
         let docs = JSON.parse(response);
