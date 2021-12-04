@@ -1,5 +1,5 @@
 <?php
-require_once(realpath($_SERVER["DOCUMENT_ROOT"]) .'\search_solr_php\php\services\GeneratorQuerySolr.php');
+require_once(realpath($_SERVER["DOCUMENT_ROOT"]) .'\BRIW\php\services\GeneratorQuerySolr.php');
 
 class ControllerSearch
 {

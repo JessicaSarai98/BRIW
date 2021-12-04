@@ -1,6 +1,6 @@
 <?php
 
-require_once(realpath($_SERVER["DOCUMENT_ROOT"]) .'\search_solr_php\vendor\autoload.php');
+require_once(realpath($_SERVER["DOCUMENT_ROOT"]) .'\BRIW\vendor\autoload.php');
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Exception\ConnectException;
@@ -12,30 +12,34 @@ class CrawlerService
 
     public function crawlingProcess($urls){
         $urls = explode(",", $urls);
-        $urlsSaved = $this->readDoc(realpath($_SERVER["DOCUMENT_ROOT"]) .'\search_solr_php\urls.txt');
-        $this->writeDocs(realpath($_SERVER["DOCUMENT_ROOT"]) .'\search_solr_php\urls.txt', $urls);
+        $urlsSaved = $this->readDoc(realpath($_SERVER["DOCUMENT_ROOT"]) .'\BRIW\urls.txt');
+        $this->writeDocs(realpath($_SERVER["DOCUMENT_ROOT"]) .'\BRIW\urls.txt', $urls);
 
         for ($i=0; $i < count($urls); $i++) {
-            if (in_array($urls[$i], $urlsSaved) != 1 && $urls[$i] != null){
+            $solrExist = $this->findDocByUrlAttribute($urls[$i])->response->docs;
+            $dateModified = $this->getModifiedDate($urls[$i]);
+
+            if ( empty($solrExist) || ($solrExist[0]->attr_date_modified[0] != $dateModified)  ){
                 $response = $this->getClient($urls[$i]);
-                $html = "<meta property='url' content = '$urls[$i]'>".$response->getBody();
+                $attributes = "<meta property='url' content = '$urls[$i]'><meta property='date_modified' content = '$dateModified'><meta property='id_param_search' content = '$i'>";
+                $html = $attributes.$response->getBody();
                 try {
                     if ($response->getStatusCode() == 200) {
                         $html = $this->remover_javascriptCSS($html);
-                        $reponseSolr = $this->addDocumentSolr($this->urlSorl, $html);
-                        echo $reponseSolr->getStatusCode()."<br/>".$reponseSolr->getBody();
+                        $this->addDocumentSolr($this->urlSorl, $html);
+                        //echo $reponseSolr->getStatusCode()."<br/>".$reponseSolr->getBody();
                     }
-                } catch (\Throwable $th) {
+                } catch (Exception $th) {
                     echo $th->getMessage();
                 }
             }else{
-                echo "Exists url in file";
+                echo "Exists url in solr";
             }
         }
         return 'Resultados indizados';
     }
 
-    private function getClient($url){
+    public function getClient($url){
         try {
             $client = new Client();
             return $client->request('GET', $url, ['verify' => false]);
@@ -68,6 +72,20 @@ class CrawlerService
         return $html;
     }
 
+    public function getModifiedDate($url) {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_NOBODY, true);
+        curl_setopt($ch, CURLOPT_HEADER, true);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_FILETIME, true);
+        curl_exec($ch);
+        $header = curl_getinfo($ch);
+        curl_close($ch);
+        return date ("Y-m-d H:i:s",$header['filetime']);
+    }
+
     public function writeDocs($fileLocation, $urls) {
         $file = fopen($fileLocation, "w");
         for ($i=0; $i < count($urls); $i++) {
@@ -92,4 +110,16 @@ class CrawlerService
         return $file;
     }
 
+   public function findDocByUrlAttribute($url){
+        $resultados = file_get_contents("http://localhost:8983/solr/briw_pro/select?q=attr_url:%22$url%22&fl=attr_url+attr_date_modified");
+        return json_decode($resultados);
+    }
+
 }
+
+$craw  = new CrawlerService();
+$craw->crawlingProcess("https://www.sitepoint.com/");
+//var_dump($craw->findDocByUrlAttribute("https://www.sitepoint.com/blog")->response->docs);
+//$craw->getClient("https://www.merida.gob.mx/");
+//$craw->getClient("https://www.itmerida.mx/");
+//var_dump($craw->getModifiedDate("https://stackoverflow.com"));
