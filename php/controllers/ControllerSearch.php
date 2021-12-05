@@ -5,7 +5,7 @@ class ControllerSearch
 {
     public function search($request){
         $query = new GeneratorQuerySolr();
-        $resultados = file_get_contents($query->generateQuery($request).'&wt=json');
+        $resultados = file_get_contents($query->generateQuery($request).'&sow=false&wt=json');
         return json_encode($resultados);
     }
 }
