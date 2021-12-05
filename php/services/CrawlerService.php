@@ -160,7 +160,7 @@ class CrawlerService
 
 }
 
-$craw  = new CrawlerService();
+//$craw  = new CrawlerService();
 //$craw->crawlingProcess("https://www.sitepoint.com/");
 //var_dump($craw->findDocByUrlAttribute("https://www.sitepoint.com/blog")->response->docs);
 //$craw->getClient("https://www.merida.gob.mx/");
