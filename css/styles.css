@@ -148,6 +148,7 @@ tr > td {
     font-size: 20px;
     /* font: 'century'; */
     font-weight: bold;
+    width: 80%;
     /* width: 40%;
     display: flex;
     flex-direction: column;

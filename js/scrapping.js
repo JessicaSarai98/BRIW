@@ -17,7 +17,6 @@ function scrapping() {
     }
     let urlScrapping = 'php/WebScrapping.php?urls=' + urls;
     get(urlScrapping).then(function(response) {
-        debugger
         console.log("response",response);
         alert("Resultados indizados");
     }, function(error) {

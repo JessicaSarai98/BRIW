@@ -12,22 +12,45 @@ class CrawlerService
 
     public function crawlingProcess($urls){
         $urls = explode(",", $urls);
-        $urlsSaved = $this->readDoc(realpath($_SERVER["DOCUMENT_ROOT"]) .'\BRIW\urls.txt');
         $this->writeDocs(realpath($_SERVER["DOCUMENT_ROOT"]) .'\BRIW\urls.txt', $urls);
 
         for ($i=0; $i < count($urls); $i++) {
             $solrExist = $this->findDocByUrlAttribute($urls[$i])->response->docs;
             $dateModified = $this->getModifiedDate($urls[$i]);
-
+            //echo $urls[$i];
             if ( empty($solrExist) || ($solrExist[0]->attr_date_modified[0] != $dateModified)  ){
                 $response = $this->getClient($urls[$i]);
-                $attributes = "<meta property='url' content = '$urls[$i]'><meta property='date_modified' content = '$dateModified'><meta property='id_param_search' content = '$i'>";
+                $attributes = "<meta property='url' content = '$urls[$i]'><meta property='date_modified' content = '$dateModified'>";
                 $html = $attributes.$response->getBody();
                 try {
                     if ($response->getStatusCode() == 200) {
+                        //echo "index file";
                         $html = $this->remover_javascriptCSS($html);
                         $this->addDocumentSolr($this->urlSorl, $html);
-                        //echo $reponseSolr->getStatusCode()."<br/>".$reponseSolr->getBody();
+
+                        //get childrens
+                        $children = $this->getChildrenUrl($html,$urls[$i]);
+                        $size = count($children);
+                        if( count($children) > 3 ){
+                            $size = 3;
+                        }
+
+                        for($j= 0; $j < $size; $j++){
+                            $solrExistChild = $this->findDocByUrlAttribute($children[$j])->response->docs;
+                            $dateModifiedChild = $this->getModifiedDate($children[$j]);
+
+                            if ( empty($solrExistChild) || ($solrExistChild[0]->attr_date_modified[0] != $dateModifiedChild)  ){
+                                $responseChild = $this->getClient($children[$i]);
+                                $attributesChild = "<meta property='url' content = '$$children[$i]'><meta property='date_modified' content = '$dateModifiedChild'>";
+                                $htmlChild = $attributesChild.$responseChild->getBody();
+                                if ($responseChild->getStatusCode() == 200) {
+                                    $htmlChild = $this->remover_javascriptCSS($htmlChild);
+                                    $this->addDocumentSolr($this->urlSorl, $htmlChild);
+                                }
+                            }
+                        }
+                        //end block children
+
                     }
                 } catch (Exception $th) {
                     echo $th->getMessage();
@@ -70,6 +93,26 @@ class CrawlerService
         $html = preg_replace('/<script\b[^>]*>(.*?)<\/script>/is', "", $html);
         $html = preg_replace('/<style\b[^>]*>(.*?)<\/style>/is', "", $html);
         return $html;
+    }
+
+    public function getChildrenUrl($html, $url) {
+        $url = substr($url, -1) == '/' ? substr($url, 0, -1) : $url;
+        $doc = new DOMDocument();
+        $opts = array('output-xhtml' => true,
+            'numeric-entities' => true);
+        $doc->loadXML(tidy_repair_string($html,$opts));
+        $xpath = new DOMXPath($doc);
+        $xpath->registerNamespace('xhtml','http://www.w3.org/1999/xhtml');
+        $enlaces = array();
+        foreach ($xpath->query('//xhtml:a/@href') as $node) {
+            $link =  (( substr($node->nodeValue,0,4) == 'http' ) ?  $node->nodeValue : $url . $node->nodeValue ) ;
+
+            if(strpos($link, '#') == false && strpos($link, '/#') == false){
+                array_push($enlaces, $link);
+            }
+
+        }
+        return $enlaces;
     }
 
     public function getModifiedDate($url) {
@@ -118,7 +161,7 @@ class CrawlerService
 }
 
 $craw  = new CrawlerService();
-$craw->crawlingProcess("https://www.sitepoint.com/");
+//$craw->crawlingProcess("https://www.sitepoint.com/");
 //var_dump($craw->findDocByUrlAttribute("https://www.sitepoint.com/blog")->response->docs);
 //$craw->getClient("https://www.merida.gob.mx/");
 //$craw->getClient("https://www.itmerida.mx/");
